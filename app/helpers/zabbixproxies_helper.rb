@@ -1,0 +1,2 @@
+module ZabbixproxiesHelper
+end

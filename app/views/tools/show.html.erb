@@ -1,0 +1,14 @@
+<div class="factoryresets tools">
+
+<h2>CONFIGRATION IMPORT</h2>
+
+<div class="basic_info">
+<h3>設定情報のインポート</h3>
+<%= form_tag 'tool', :multipart =>true do %>
+  <p><span class="description comment">Config File(.tar)を以下よりアップロードしてください</span></p>
+  <label><%= file_field_tag :uppic, :size => 100, :class => 'update_comment' %></label>
+  <p><%= submit_tag 'Upload', :class => 'button', data: {confirm: "設定情報のインポートを実行しますか？（インポート完了後、自動で再起動しますので再接続ください）", disable_with: 'Running...' } %></p>
+
+<% end %>
+
+</div>

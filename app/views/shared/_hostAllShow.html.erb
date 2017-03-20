@@ -1,0 +1,18 @@
+    <h3>対象ホスト一覧</h3>
+    <a href="host" id="list_update" class="button">List Update</a>
+    <table>
+      <thead>
+        <tr>
+          <th>ホスト名</th>
+          <th>IP Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @hosts.each do |host| %>
+        <tr>
+          <td><%= host.hostname %></td>
+          <td><%= host.ip %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>

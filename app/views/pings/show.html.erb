@@ -1,0 +1,50 @@
+<div class="factoryresets pings">
+
+  <h2>PING SCRIPT</h2>
+
+  <div class="basic_info">
+    <%= render 'shared/hostAllShow' %>
+
+    <div>
+      <button id="pingstart" class="button">Start</button>
+      <button id="pingstop" class="button">Stop</button>
+      <button id="ping_table_clear" class="button">Clear</button>
+    </div>
+  </div>
+
+  <div id="ping_result_div" class="basic_info display_none">
+    <h3>実行結果　　[画面更新間隔：<span id="ping_host_length"><%= @hosts_length %></span>ms]</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ホスト名</th>
+          <th>IP</th>
+          <th>直近のステータス</th>
+          <th>実施回数</th>
+          <th>NG回数</th>
+          <th>失敗率</th>
+          <th>最短時間(ms)</th>
+          <th>最大時間(ms)</th>
+          <th>平均時間(ms)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @results.each do |result| %>
+        <tr>
+          <td class="<%= result[9] %> ping_hostname"><%= result[0] %></td>
+          <td class="<%= result[9] %> ping_ip"><%= result[1] %></td>
+          <td class="<%= result[9] %> ping_status"><%= result[8] %></td>
+          <td class="<%= result[9] %> ping_all"><%= result[2] %></td>
+          <td class="<%= result[9] %> ping_ng"><%= result[3] %></td>
+          <td class="<%= result[9] %> ping_ngpercent"><%= result[4] %></td>
+          <td class="<%= result[9] %> ping_short"><%= result[5] %></td>
+          <td class="<%= result[9] %> ping_long"><%= result[6] %></td>
+          <td class="<%= result[9] %> ping_average"><%= result[7] %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

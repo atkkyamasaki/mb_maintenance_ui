@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  host: one
+  status: 1
+  response: 1.5
+
+two:
+  host: two
+  status: 1
+  response: 1.5

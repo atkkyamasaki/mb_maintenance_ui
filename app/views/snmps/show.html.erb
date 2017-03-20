@@ -1,0 +1,34 @@
+<div class="snmps">
+
+  <h2><%= render text: 'SNMP 情報' %></h2>
+
+  <div class="basic_info">
+    <h3>設定</h3>
+
+    <p><span class="description">MIB/SNMPTTファイルを最新情報へ更新</span></p>
+    <button class="button" id="tool_mib_snmptt_update">Update</button>
+
+  </div>
+
+  
+  <div class="basic_info">
+    <h3>SNMPTT File 一覧</h3>
+  
+    <p><span class="description">File数</span><%= @snmptt.length %></p>
+  
+    <% @snmptt.each do |val| %>
+    <p><%= val %></p>
+    <% end %>
+  </div>
+  
+  <div class="basic_info">
+    <h3>MIB File 一覧</h3>
+  
+    <p><span class="description">File数</span><%= @mib.length %></p>
+  
+    <% @mib.each do |val| %>
+    <p><%= val %></p>
+    <% end %>
+  </div>
+
+</div>

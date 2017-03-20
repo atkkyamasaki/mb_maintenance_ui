@@ -1,0 +1,441 @@
+*********************** インストール情報 ***********************
+2017年  1月  6日 金曜日 22:42:50 JST
+@zbxSrvIp:150.87.1.103
+@mbName:ycctest1
+@eth0Ip:10.0.0.21
+@eth0Mask:255.0.0.0
+@eth2Ip:169.254.1.3
+@route:192.168.0.0/16 via 10.0.0.1
+
+
+
+*********************** パッケージのインストール ***********************
+=== yum -y -q install rubygems ruby-devel ===
+Package rubygems-1.3.7-5.el6.noarch already installed and latest version
+Package ruby-devel-1.8.7.374-3.el6_6.x86_64 already installed and latest version
+
+
+=== gem install snmp -v 1.1.1 ===
+Successfully installed snmp-1.1.1
+Parsing documentation for snmp-1.1.1
+Done installing documentation for snmp after 1 seconds
+1 gem installed
+
+
+=== gem install json -v 1.8.3 ===
+Building native extensions.  This could take a while...
+Successfully installed json-1.8.3
+Parsing documentation for json-1.8.3
+Done installing documentation for json after 1 seconds
+1 gem installed
+
+
+
+
+
+*********************** gitenv ***********************
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/.netrc.enc /root/.netrc.enc ===
+
+
+=== echo Ch1Qwakare-! > /root/tmp ===
+
+
+=== openssl aes-256-cbc -d -in /root/.netrc.enc -pass file:/root/tmp -out /root/.netrc ===
+
+
+
+
+
+*********************** hostname ***********************
+=== sed -i -e s/HOSTNAME=.*/HOSTNAME=ycctest1/g /etc/sysconfig/network ===
+
+
+
+
+
+*********************** lm_sensors ***********************
+=== yes | sensors-detect ===
+Stopping lm_sensors: [  OK  ]
+# sensors-detect revision 1.1
+# System: VMware, Inc. VMware Virtual Platform
+# Board: Intel Corporation 440BX Desktop Reference Platform
+
+This program will help you determine which kernel modules you need
+to load to use lm_sensors most effectively. It is generally safe
+and recommended to accept the default answers to all questions,
+unless you know what you're doing.
+
+Some south bridges, CPUs or memory controllers contain embedded sensors.
+Do you want to scan for them? This is totally safe. (YES/no): Silicon Integrated Systems SIS5595...                       No
+VIA VT82C686 Integrated Sensors...                          No
+VIA VT8231 Integrated Sensors...                            No
+AMD K8 thermal sensors...                                   No
+AMD Family 11h thermal sensors...                           No
+Intel digital thermal sensor...                             Success!
+    (driver `coretemp')
+Intel AMB FB-DIMM thermal sensor...                         No
+VIA C7 thermal and voltage sensors...                       No
+
+Some Super I/O chips contain embedded sensors. We have to write to
+standard I/O ports to probe them. This is usually safe.
+Do you want to scan for Super I/O sensors? (YES/no): Probing for Super-I/O at 0x2e/0x2f
+Trying family `National Semiconductor'...                   Yes
+Found unknown chip with ID 0x0f00
+Probing for Super-I/O at 0x4e/0x4f
+Trying family `National Semiconductor'...                   No
+Trying family `SMSC'...                                     No
+Trying family `VIA/Winbond/Nuvoton/Fintek'...               No
+Trying family `ITE'...                                      No
+
+Some systems (mainly servers) implement IPMI, a set of common interfaces
+through which system health data may be retrieved, amongst other things.
+We first try to get the information from SMBIOS. If we don't find it
+there, we have to read from arbitrary I/O ports to probe for such
+interfaces. This is normally safe. Do you want to scan for IPMI
+interfaces? (YES/no): Probing for `IPMI BMC KCS' at 0xca0...                      No
+Probing for `IPMI BMC SMIC' at 0xca8...                     No
+
+Some hardware monitoring chips are accessible through the ISA I/O ports.
+We have to write to arbitrary I/O ports to probe them. This is usually
+safe though. Yes, you do have ISA I/O ports even if you do not have any
+ISA slots! Do you want to scan the ISA I/O ports? (YES/no): Probing for `National Semiconductor LM78' at 0x290...       No
+Probing for `National Semiconductor LM79' at 0x290...       No
+Probing for `Winbond W83781D' at 0x290...                   No
+Probing for `Winbond W83782D' at 0x290...                   No
+
+Lastly, we can probe the I2C/SMBus adapters for connected hardware
+monitoring devices. This is the most risky part, and while it works
+reasonably well on most systems, it has been reported to cause trouble
+on some systems.
+Do you want to probe the I2C/SMBus adapters now? (YES/no): Using driver `i2c-piix4' for device 0000:00:07.3: Intel 82371AB PIIX4 ACPI
+Module i2c-dev loaded successfully.
+
+Now follows a summary of the probes I have just done.
+Just press ENTER to continue: 
+Driver `coretemp':
+  * Chip `Intel digital thermal sensor' (confidence: 9)
+
+Do you want to overwrite /etc/sysconfig/lm_sensors? (YES/no): Starting lm_sensors: loading module coretemp [  OK  ]
+Unloading i2c-dev... OK
+
+
+
+=== chkconfig lm_sensors on ===
+
+
+
+
+
+*********************** lanip(Eth0) ***********************
+=== sed -i -e s/^IPADDR=.*/IPADDR=10.0.0.21/g /etc/sysconfig/network-scripts/ifcfg-eth0 ===
+
+
+=== sed -i -e s/^NETMASK=.*/NETMASK=255.0.0.0/g /etc/sysconfig/network-scripts/ifcfg-eth0 ===
+
+
+
+
+
+*********************** lanip(Eth2) ***********************
+=== sed -i -e s/^IPADDR=.*/IPADDR=169.254.1.3/g /etc/sysconfig/network-scripts/ifcfg-eth2 ===
+
+
+
+
+
+*********************** route ***********************
+=== rm -f /etc/sysconfig/network-scripts/route-eth0 ===
+
+
+=== echo 192.168.0.0/16 via 10.0.0.1 >> /etc/sysconfig/network-scripts/route-eth0 ===
+
+
+
+
+
+*********************** rsyslog ***********************
+=== mkdir -p /var/log/netmon/router ===
+
+
+=== mkdir -p /var/log/monitorbox ===
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/rsyslog.conf /etc/rsyslog.conf ===
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/sysconfig/rsyslog /etc/sysconfig/rsyslog ===
+
+
+=== service rsyslog restart ===
+システムロガーを停止中: [  OK  ]
+システムロガーを起動中: [  OK  ]
+
+
+
+
+
+*********************** logrotate ***********************
+=== mv /etc/cron.daily/logrotate /etc/cron.hourly/logrotate ===
+mv: cannot stat `/etc/cron.daily/logrotate': そのようなファイルやディレクトリはありません
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/logrotate.d/remote /etc/logrotate.d/remote ===
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/logrotate.d/syslog /etc/logrotate.d/syslog ===
+
+
+
+
+
+*********************** service ***********************
+=== chkconfig xinetd on ===
+
+
+=== service xinetd start ===
+xinetd を起動中: 
+
+
+=== mkdir -p /root/tftp ===
+
+
+
+
+
+*********************** ipv6 ***********************
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/sysctl.conf /etc/sysctl.conf ===
+
+
+=== /sbin/sysctl -p ===
+net.ipv4.ip_forward = 0
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.default.accept_source_route = 0
+kernel.sysrq = 0
+kernel.core_uses_pid = 1
+net.ipv4.tcp_syncookies = 1
+kernel.msgmnb = 65536
+kernel.msgmax = 65536
+kernel.shmmax = 68719476736
+kernel.shmall = 4294967296
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+
+
+
+
+
+*********************** sshd ***********************
+=== sed -i s/^#ListenAddress 0.0.0.0/ListenAddress 169.254.1.3/ /etc/ssh/sshd_config ===
+
+
+=== service sshd restart ===
+sshd を停止中: [  OK  ]
+sshd を起動中: [  OK  ]
+
+
+
+
+
+*********************** ntpd ***********************
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/ntp.conf /etc/ntp.conf ===
+
+
+=== service ntpd restart ===
+ntpd を停止中: [  OK  ]
+ntpd を起動中: [  OK  ]
+
+
+
+
+
+*********************** mibs ***********************
+=== rm -rf /usr/share/netmon/mibs ===
+
+
+=== git clone https://bitbucket.org/atkksoldev/mibs.git /usr/share/netmon/mibs/ ===
+Initialized empty Git repository in /usr/share/netmon/mibs/.git/
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/snmp/snmp.conf /etc/snmp/snmp.conf ===
+
+
+=== service snmptrapd restart ===
+snmptrapd を停止中: [  OK  ]
+snmptrapd を起動中: [  OK  ]
+
+
+
+
+
+*********************** snmptt ***********************
+=== rm -rf /etc/snmp/snmptt.conf.d ===
+
+
+=== git clone https://bitbucket.org/atkksoldev/snmpttconfig4netmon.git /etc/snmp/snmptt.conf.d/ ===
+Initialized empty Git repository in /etc/snmp/snmptt.conf.d/.git/
+
+
+=== sed -i -e s/^date_time_format =.*/date_time_format = %Y/%m/%d %H:%M:%S/g /etc/snmp/snmptt.ini ===
+
+
+=== sed -i /^/etc/snmp/snmptt.conf$/d /etc/snmp/snmptt.ini ===
+
+
+=== sed -i /^/etc/snmp/snmptt.conf.d/.*.conf/d /etc/snmp/snmptt.ini ===
+
+
+=== sh /etc/snmp/snmptt.conf.d/confinsert.sh ===
+/etc/snmp/snmptt.conf.d/confinsert.sh: line 11: systemctl: コマンドが見つかりません
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/tmp/disable_unnessesary_msg.patch /tmp/disable_unnessesary_msg.patch ===
+cp: cannot stat `/var/www/mb_maintenance_ui/public/init_setup/config/tmp/disable_unnessesary_msg.patch': そのようなファイルやディレクトリはありません
+
+
+=== patch -uN /usr/local/sbin/snmptt < /tmp/disable_unnessesary_msg.patch ===
+
+
+=== rm -f /usr/local/sbin/snmptt.rej ===
+
+
+
+
+
+*********************** snmptt(Deamon Mode) ***********************
+=== yum  -y -q install epel-release ===
+Package epel-release-6-8.noarch already installed and latest version
+
+
+=== yum  -y -q install perl-Config-IniFiles perl-Time-HiRes ===
+Package perl-Config-IniFiles-2.72-2.el6.noarch already installed and latest version
+Package 4:perl-Time-HiRes-1.9721-136.el6.x86_64 already installed and latest version
+
+
+=== \cp /etc/snmp/snmptt.ini /etc/snmp/snmptt.ini.standalone ===
+
+
+=== \cp /etc/snmp/snmptrapd.conf /etc/snmp/snmptrapd.conf.standalone ===
+
+
+=== \cp /etc/sysconfig/snmptrapd /etc/sysconfig/snmptrapd.standalone ===
+
+
+=== \cp /etc/rc.d/init.d/snmptrapd /etc/rc.d/init.d/snmptrapd.standalone ===
+
+
+=== mkdir /var/spool/snmptt/ ===
+mkdir: ディレクトリ `/var/spool/snmptt/' を作成できません: ファイルが存在します
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/rc.d/init.d/snmptt /etc/rc.d/init.d/snmptt ===
+
+
+=== chmod 755 /etc/rc.d/init.d/snmptt ===
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/snmp/snmptt.ini /etc/snmp/snmptt.ini ===
+
+
+=== chkconfig --add snmptt ===
+
+
+=== chkconfig --level 2345 snmptt on ===
+
+
+=== sh /etc/snmp/snmptt.conf.d/confinsert.sh ===
+/etc/snmp/snmptt.conf.d/confinsert.sh: line 11: systemctl: コマンドが見つかりません
+
+
+=== service snmptt start ===
+snmptt を起動中: 
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/sysconfig/snmptrapd /etc/sysconfig/snmptrapd ===
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/etc/snmp/snmptrapd.conf /etc/snmp/snmptrapd.conf ===
+
+
+=== service snmptrapd restart ===
+snmptrapd を停止中: [  OK  ]
+snmptrapd を起動中: [  OK  ]
+
+
+
+
+
+*********************** zabbix_agent ***********************
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/usr/local/etc/zabbix_agentd.conf /usr/local/etc/zabbix_agentd.conf ===
+
+
+=== sed -i -e s/^Hostname=.*/Hostname=ycctest1_MonitorBox/g /usr/local/etc/zabbix_agentd.conf ===
+
+
+=== sed -i -e s/^Server=.*/Server=169.254.1.3/g /usr/local/etc/zabbix_agentd.conf ===
+
+
+=== sed -i -e s/^ServerActive=.*/ServerActive=169.254.1.3/g /usr/local/etc/zabbix_agentd.conf ===
+
+
+=== sed -i /^ListenIPs*=.*/d /usr/local/etc/zabbix_agentd.conf ===
+
+
+=== sed -i /# ListenIP=0.0.0.0/aListenIP=169.254.1.3 /usr/local/etc/zabbix_agentd.conf ===
+
+
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/usr/local/etc/zabbix_agentd.conf.d/temperature.conf /usr/local/etc/zabbix_agentd.conf.d/temperature.conf ===
+
+
+=== service zabbix_agentd restart ===
+Zabbix Agent を停止中: [失敗]
+Zabbix Agent を起動中: [  OK  ]
+
+
+
+
+
+*********************** zabbix_proxy ***********************
+=== \cp -f /var/www/mb_maintenance_ui/public/init_setup/config/usr/local/etc/zabbix_proxy.conf /usr/local/etc/zabbix_proxy.conf ===
+
+
+=== sed -i -e s/^Server=.*/Server=150.87.1.103/g /usr/local/etc/zabbix_proxy.conf ===
+
+
+=== sed -i -e s/^Hostname=.*/Hostname=ycctest1/g /usr/local/etc/zabbix_proxy.conf ===
+
+
+=== sed -i -e s/^Timeout=.*/Timeout=10/g /usr/local/etc/zabbix_proxy.conf ===
+
+
+=== service zabbix_proxy restart ===
+Zabbix Proxy を停止中: [失敗]
+Zabbix Proxy を起動中: [  OK  ]
+
+
+
+
+
+*********************** zbx_extscript ***********************
+=== rm -rf /usr/local/etc/zabbix/externalscripts ===
+
+
+=== git clone https://bitbucket.org/atkksoldev/zbx-externalscripts.git /usr/local/etc/zabbix/externalscripts/ ===
+Initialized empty Git repository in /usr/local/etc/zabbix/externalscripts/.git/
+
+
+
+
+
+*********************** 後処理 ***********************
+=== rm -f /root/tmp ===
+
+
+=== rm -f /root/.netrc ===
+
+
+=== rm -f /root/.netrc.enc ===
+
+
+=== shutdown -r +1 ===
+
+

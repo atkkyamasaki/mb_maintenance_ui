@@ -1,0 +1,71 @@
+#!/bin/sh
+set -e
+set -u
+
+# アプリケーションのルートディレクトリを指定
+APPLICATION_ROOT="/var/www/mb_maintenance_ui"
+
+# オプション設定
+# 下記はデフォルトの値。変更したい場合は適宜編集
+# ENVIRONMENT = test/development/production のいずれか。
+PORT="3000"
+BINDING_IP=`ip addr show eth2 | sed -nEe 's/^[ \t]*inet[ \t]*([0-9.]+)\/.*$/\1/p'`
+ENVIRONMENT="development"
+
+start () {
+  cd ${APPLICATION_ROOT}
+  rails server --daemon --binding=${BINDING_IP} --port=${PORT} --environment=${ENVIRONMENT}
+}
+
+stop () {
+  cat ${APPLICATION_ROOT}/tmp/pids/server.pid | xargs kill -9
+}
+
+restart () {
+  stop
+  start
+}
+
+status () {
+  STATUS=`ps aux | grep [p]uma | awk '{ print $11,$12 }' | tr -d '\n'`
+  if [ -n "$STATUS" ]; then
+    echo "Running..."
+  else
+    echo "Stop!"
+  fi
+}
+
+help () {
+  echo "Usage: $0 {start|stop|restart|status|help}"
+}
+
+# 引数のサイズをチェック
+# set -u と $1を併用するためのhack
+# http://tech.lampetty.net/tech/index.php/archives/455
+if [ $# -lt 1 ]; then
+    help
+    exit 1
+fi
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+  status)
+    status
+    ;;
+  help)
+    help
+    ;;
+  *)
+    help
+    exit 1
+esac
+
+exit $?

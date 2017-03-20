@@ -1,0 +1,62 @@
+<div class="factoryresets snmptraps">
+
+  <h2>SNMP TRAP</h2>
+  
+  <div class="basic_info">
+    <%= render 'shared/hostAllShow' %>
+  </div>
+  
+  <div class="basic_info">
+    <h3>実行結果<span class="snmptrap_time">  [現在日時：<%= Time.now %>]</span></h3>
+    <div id="snmptrap_get_ajax" class="ajax_update_button">
+      <i class="fa fa-repeat" aria-hidden="true"></i>
+    </div>
+    <button id="snmptrap_start" class="button">Start</button>
+    <span class="class_countdown">CountDown:
+      <select id="snmptrap_interval" name="interval">
+        <option value="10">10s</option>
+        <option value="30" selected>30s</option>
+        <option value="60">60s</option>
+        <option value="300">300s</option>
+      </select>
+    </span>
+    <span id="snmptrap_countdown" class="do_countdown">
+    </span>
+    <button id="snmptrap_stop" class="button">Stop</button>
+
+  
+    <table class="snmptrap_table">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Day</th>
+          <th>Time</th>
+          <th>Host</th>
+          <th>IP</th>
+          <th>Trap Item</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody id="snmptrap_change_tbody">
+      <% if @results.empty? then%>
+      <tr>
+        <td class="set_loading" colspan="7">直近でSNMPトラップは検知していません。</td>
+      </tr>
+      <% elsif %>
+        <% @results.each do |result| %>
+        <tr>
+          <td class="trap_month set_loading"><%= result[0] %></td>
+          <td class="trap_day set_loading"><%= result[1] %></td>
+          <td class="trap_time set_loading"><%= result[2] %></td>
+          <td class="trap_host set_loading"><%= result[3] %></td>
+          <td class="trap_ip set_loading"><%= result[4] %></td>
+          <td class="trap_item set_loading"><%= result[5] %></td>
+          <td class="trap_message set_loading"><%= result[6] %></td>
+        </tr>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MbMaintenanceUi</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <%= javascript_include_tag '//code.highcharts.com/highcharts.js', 'chartkick' %>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <%= favicon_link_tag '/assets/favicon.ico' %>
+  </head>
+
+  <% if cookies["global_navi_close"] %>
+    <body class="global-navigation-is-close">
+  <% else %>
+    <body>
+  <% end %>
+
+    <main class="main" role="main">
+
+
+      <header class="header">
+        <h1 class="logo"><a href="/home"><%= image_tag 'logo.png', alt: '管理UI', width: '160', height: '22' %></a></h1>    
+
+        <nav class="header_menu">
+          <div class="header_btn"><i class="fa fa-list" aria-hidden="true"></i></div>
+          <div class="header_menu_list display_none">
+          <ul>
+            <li><div id="tool_config_export" class="header_menu_item">Config Export</div></li>
+            <li><div id="tool_config_import" class="header_menu_item">Config Import</div></li>
+            <li><div id="tool_service_restart" class="header_menu_item has_header_submenu ">Service Restart<i class="fa fa-bars pull-right"></i></div></li>
+            <ul class="header_submenu display_none">
+              <li><div id="tool_restart_zbxproxy" class="header_menu_item">Zabbix Proxy</div></li>
+              <li><div id="tool_restart_zbxagent" class="header_menu_item">Zabbix Agent</div></li>
+              <li><div id="tool_restart_pgsql" class="header_menu_item">Postgresql</div></li>
+              <li><div id="tool_restart_snmptt" class="header_menu_item">SNMPTT</div></li>
+              <li><div id="tool_restart_snmptrapd" class="header_menu_item">SNMPT TRAPD</div></li>
+              <li><div id="tool_restart_ntpd" class="header_menu_item">NTPD</div></li>
+              <li><div id="tool_restart_rsyslogd" class="header_menu_item">Rsyslog</div></li>
+            </ul>
+            <li><div id="tool_mb_reboot" class="header_menu_item">MonitorBox Reboot</div></li>
+            <li><div class="header_menu_item has_header_submenu ">Link<i class="fa fa-bars pull-right"></i></div></li>
+            <ul class="header_submenu display_none">
+              <li><div class="header_menu_item"><a href="https://net.monitor.allied-telesis.co.jp/dashboard.php" target="blank">Potal Site</a></div></li>
+              <li><div class="header_menu_item"><a href="http://www.allied-telesis.co.jp" target="blank">Allied Telesis</a></div></li>
+              <li><div class="header_menu_item"><a href="http://150.87.0.111:8080" target="blank">Console API</a></div></li>
+            </ul>
+          </ul>
+          </div>
+        </nav>
+
+        <h1 class="logout"><%= link_to 'Logout', '/login', :method => :delete, :class => "fa fa-sign-out", data: {confirm: 'ログアウトしますか？'} %></h1>
+      </header>
+
+      <article class="article">
+        <%= yield %>
+      </article>
+
+    <footer class="footer">MonitorBox Maintenance WebUI @2017 atccj-noc</footer>
+
+    </main>
+
+    <nav class="global-navigation">
+      <button class="menu-button"><i class="fa fa-bars" aria-hidden="true"></i><span>メニュー</span></button>
+      <ul>
+
+        <li>
+          <% if params[:controller] == 'homes' then %>
+          <a href="/home" class="is-active">
+          <% else %>
+          <a href="/home">
+          <% end %>
+            <i class="fa fa-home"></i><span class="menu-name">Home</span>
+          </a>
+        </li>
+
+        <li>
+          <% if params[:controller] == 'configurations' then %>
+          <a href="#" class="is-active has-submenu"><span class="has-submenu-icon"><i class="fa fa-bars pull-right"></i></span>
+          <% else %>
+          <a href="#" class="has-submenu"><span class="has-submenu-icon"><i class="fa fa-bars pull-right"></i></span>
+          <% end %>
+            <i class="fa fa-cog"></i><span class="menu-name">Configuration</span>
+          </a>
+          <% if params[:controller] == 'zbxproxies' || params[:controller] == 'zbxagents' || params[:controller] == 'snmps' %>
+          <ul class="global-navigation-submenu">
+          <% else %>
+          <ul class="global-navigation-submenu submenu-is-close">
+          <% end %>
+            <li>
+              <% if params[:controller] == 'zbxproxies' then %>
+              <a href="/configuration/zbxproxy" class="is-active"><i class="fa fa-circle-o"></i>Zabbix Proxy</a>
+              <% else %>
+              <a href="/configuration/zbxproxy"><i class="fa fa-circle-o"></i>Zabbix Proxy</a>
+              <% end %>
+            </li>
+            <li>
+              <% if params[:controller] == 'zbxagents' then %>
+              <a href="/configuration/zbxagent" class="is-active"><i class="fa fa-circle-o"></i>Zabbix Agent</a>
+              <% else %>
+              <a href="/configuration/zbxagent"><i class="fa fa-circle-o"></i>Zabbix Agent</a>
+              <% end %>
+            </li>
+            <li>
+              <% if params[:controller] == 'snmps' then %>
+              <a href="/configuration/snmp" class="is-active"><i class="fa fa-circle-o"></i>SNMP</a>
+              <% else %>
+              <a href="/configuration/snmp"><i class="fa fa-circle-o"></i>SNMP</a>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <% if params[:controller] == 'scripts' then %>
+          <a href="#" class="is-active has-submenu"><span class="has-submenu-icon"><i class="fa fa-bars pull-right"></i></span>
+          <% else %>
+          <a href="#" class="has-submenu"><span class="has-submenu-icon"><i class="fa fa-bars pull-right"></i></span>
+          <% end %>
+            <i class="fa fa-file-code-o"></i><span class="menu-name">Script</span>
+          </a>
+          <% if params[:controller] == 'pings' || params[:controller] == 'snmptraps' %>
+          <ul class="global-navigation-submenu">
+          <% else %>
+          <ul class="global-navigation-submenu submenu-is-close">
+          <% end %>
+            <li>
+              <% if params[:controller] == 'pings' then %>
+              <a href="/script/ping" class="is-active"><i class="fa fa-circle-o"></i>Ping</a>
+              <% else %>
+              <a href="/script/ping"><i class="fa fa-circle-o"></i>Ping</a>
+              <% end %>
+            </li>
+            <li>
+              <% if params[:controller] == 'snmptraps' then %>
+              <a href="/script/snmptrap" class="is-active"><i class="fa fa-circle-o"></i>SNMP Trap</a>
+              <% else %>
+              <a href="/script/snmptrap"><i class="fa fa-circle-o"></i>SNMP Trap</a>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <% if params[:controller] == 'maintenances' then %>
+          <a href="#" class="is-active has-submenu"><span class="has-submenu-icon"><i class="fa fa-bars pull-right"></i></span>
+          <% else %>
+          <a href="#" class="has-submenu"><span class="has-submenu-icon"><i class="fa fa-bars pull-right"></i></span>
+          <% end %>
+            <i class="fa fa-exchange"></i><span class="menu-name">Maintenance</span>
+          </a>
+          <% if params[:controller] == 'factoryresets' || params[:controller] == 'techsupports' || params[:controller] == 'initialsetups' %>
+          <ul class="global-navigation-submenu">
+          <% else %>
+          <ul class="global-navigation-submenu submenu-is-close">
+          <% end %>
+            <li>
+              <% if params[:controller] == 'factoryresets' then %>
+              <a href="/maintenance/factoryreset" class="is-active"><i class="fa fa-circle-o"></i>Factory Reset</a>
+              <% else %>
+              <a href="/maintenance/factoryreset"><i class="fa fa-circle-o"></i>Factory Reset</a>
+              <% end %>
+            </li>
+            <li>
+              <% if params[:controller] == 'initialsetups' then %>
+              <a href="/maintenance/initialsetup" class="is-active"><i class="fa fa-circle-o"></i>Initial Setup</a>
+              <% else %>
+              <a href="/maintenance/initialsetup"><i class="fa fa-circle-o"></i>Initial Setup</a>
+              <% end %>
+            </li>
+            <li>
+              <% if params[:controller] == 'techsupports' then %>
+              <a href="/maintenance/techsupport" class="is-active"><i class="fa fa-circle-o"></i>Tech Support</a>
+              <% else %>
+              <a href="/maintenance/techsupport"><i class="fa fa-circle-o"></i>Tech Support</a>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </nav>
+
+  <div class="all_loading is-hide">
+    <div class="all_loading_icon"></div>
+  </div>
+
+  <div id="back-to-top" class="ajax_update_button"><a href="#"><i class="fa fa-arrow-up" aria-hidden="true"></i></a></div>
+
+  </body>
+</html>

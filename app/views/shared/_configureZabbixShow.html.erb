@@ -1,0 +1,15 @@
+<div class="zabbix_info">
+  <div class="field">
+    <%= form_tag(request.path_info, :method => :patch) do %>
+      <% @zbxConf.sort.each do |key, value| %>
+      <p class="configure_p">
+      <%= label_tag key, key, class: 'description' %> 
+      <span class="configure_edit">Edit</span>
+      <span class="configure_now"><%= value %></span>
+      <%= text_field_tag key, '', class: 'update_field update_field_is_close', size: 10, disabled: 'disabled' %> 
+      </p>
+      <% end %>
+    <%= submit_tag("Update", :class => "button", data: {confirm: "設定変更してよろしいですか？（設定変更にはサービスの再起動が発生します。）", disable_with: 'Running...'} ) %>
+    <% end %>
+  </div>
+</div>

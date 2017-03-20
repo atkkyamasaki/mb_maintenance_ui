@@ -1,0 +1,12 @@
+--- snmptt.old  2015-02-12 17:52:06.203606338 +0900
++++ snmptt      2015-02-12 17:50:46.771641337 +0900
+@@ -1648,7 +1648,8 @@
+
+         $message_short = $_;
+
+-        $message = "$receivedtrap_trans $event2[2] \"$event2[1]\" $agent_dns_name - $message_short\n";
++        # $message = "$receivedtrap_trans $event2[2] \"$event2[1]\" $agent_dns_name - $message_short\n";
++        $message = "$message_short\n";
+
+         if ($stdout_enable == 1)
+         {

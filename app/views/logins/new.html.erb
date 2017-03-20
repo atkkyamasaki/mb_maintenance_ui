@@ -1,0 +1,19 @@
+<div class="login_display">
+    <div id="login">
+        <h2>Sign in</h2>
+    
+        <!-- フラッシュ変数のメッセージを表示（ログインエラー時のみ）-->
+        <p><font color=red><%= flash[:alert] %></font></p>      
+    
+        <%= form_tag login_path do %>       
+    
+        <span class="fa fa-user"></span>
+        <%= text_field_tag :name, params[:name], :placeholder => 'Username', :id => "user" %>
+    
+        <span class="fa fa-lock"></span>
+        <%= password_field_tag :pass, params[:pass], :placeholder => 'Password', :id => "pass" %>
+    
+        <%= submit_tag "Login" %></td>
+        <% end %>
+    </div>      
+</div>     

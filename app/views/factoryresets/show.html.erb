@@ -1,0 +1,28 @@
+<div class="factoryresets">
+
+  <h2>FACTORY RESET</h2>
+  
+  <div class="basic_info">
+    <h3>Default 設定判定</h3>
+  
+    <% @judges.each do |judge| %>
+      <% if judge[1] == judge[2] %>
+        <p class="maintenance_p"><span class="description"><%= judge[0] %></span><span class="default">Default</span><span class="configure_now"><%= judge[1] %></span></p>
+      <% else %>
+        <p class="maintenance_p"><span class="description"><%= judge[0] %></span><span class="not_default">Not Default</span><span class="configure_now"><%= judge[1] %></span></p>
+      <% end %>
+  <% end %>
+  </div>
+  
+  
+  <div class="basic_info">
+    <h3>Factory Reset の実行</h3>
+  
+    <p><span class="description comment">Factory Reset 処理には 10分以上かかる場合があります。</br>（※ 完全に出荷状態に戻るわけではありませんのでご留意ください。）</span></p>
+  
+    <%= form_tag(request.path_info, :method => :patch) do %>
+    <%= submit_tag("Start", :class => "button", data: {confirm: "初期化スクリプトを実行しますか？（再起動しますので、10分後に再接続ください）", disable_with: 'Running...' } ) %>
+    <% end %>
+  </div>
+
+</div>

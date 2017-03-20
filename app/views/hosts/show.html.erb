@@ -1,0 +1,34 @@
+<div class="factoryresets hosts">
+
+<h2>HOSTS</h2>
+
+<div class="basic_info">
+  <h3>対象ホスト一覧</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ホスト名</th>
+        <th>IP Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @hosts.each do |host| %>
+      <tr>
+        <td><%= host.hostname %></td>
+        <td><%= host.ip %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="basic_info">
+<h3>ホスト一覧の更新</h3>
+<%= form_tag 'host', :multipart =>true do %>
+  <p><span class="description comment">CSV Fileを以下よりアップロードしてください</span></p>
+  <label><%= file_field_tag :uppic, :size => 100, :class => 'update_comment' %></label>
+  <p><%= submit_tag 'Upload', :class => 'button', data: {confirm: "ホスト情報のインポートを実行しますか？", disable_with: 'Running...' } %></p>
+<% end %>
+
+</div>

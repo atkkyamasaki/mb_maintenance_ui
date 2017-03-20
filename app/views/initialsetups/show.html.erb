@@ -1,0 +1,48 @@
+<div class="factoryresets">
+
+<h2>INITIAL SETUP</h2>
+
+  <div class="basic_info">
+    <h3>Default 設定判定</h3>
+  
+    <% @judges.each do |judge| %>
+      <% if judge[1] == judge[2] %>
+        <p class="maintenance_p"><span class="description"><%= judge[0] %></span><span class="default">Default</span><span class="configure_now"><%= judge[1] %></span></p>
+      <% else %>
+        <p class="maintenance_p"><span class="description"><%= judge[0] %></span><span class="not_default">Not Default</span><span class="configure_now"><%= judge[1] %></span></p>
+      <% end %>
+  <% end %>
+  
+  </div>
+
+  <div class="basic_info">
+    <h3> 初期キッティングの実行</h3>
+  
+      <%= form_tag(request.path_info, :method => :patch) do %>
+        <p class="maintenance_p">
+            <%= label_tag 'mb_name', 'MonitorBox名', class: 'description' %>
+            <%= text_field_tag 'mb_name', '', class: 'update_field', size: 21, placeholder: 'ex. ABCD0' %>
+        </p>
+        <p class="maintenance_p">
+            <%= label_tag 'eth0_ip', 'Eth0 IP(お客様側)', class: 'description' %> 
+            <%= text_field_tag 'eth0_ip', '', class: 'update_field', size: 21, placeholder: 'ex. x.x.x.x' %>
+        </p>
+        <p class="maintenance_p">
+            <%= label_tag 'eth0_mask', 'Eth0 MASK(お客様側)', class: 'description' %> 
+            <%= text_field_tag 'eth0_mask', '', class: 'update_field', size: 21, placeholder: 'ex. 255.255.255.0' %>
+        </p>
+        <p class="maintenance_p">
+            <%= label_tag 'eth2_ip', 'Eth2 IP(基盤側)', class: 'description' %> 
+            <%= text_field_tag 'eth2_ip', '', class: 'update_field', size: 21, placeholder: 'ex. 169.254.1.x' %>
+        </p>
+        <p class="maintenance_p">
+            <%= label_tag 'route', '経路設定', class: 'description' %> 
+            <%= text_field_tag 'route', '', class: 'update_field', size: 21, placeholder: 'ex. y.y.y.y/24 via z.z.z.z' %>
+        </p>
+        <%= submit_tag("Start", :class => "button", data: {confirm: "初期キッティングを実行してよろしいですか？（MonitorBox 再起動が発生します。）" , disable_with: 'Running...'} ) %>
+      <% end %>
+
+  </div>
+
+</div>
+

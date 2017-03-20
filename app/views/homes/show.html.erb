@@ -1,0 +1,88 @@
+<div class="homes">
+
+<h2>DASHBOARD</h2>
+
+<div class="basic_info">
+  <h3>MonitorBox 基本情報</h3>
+  <p><span class="description">ホスト名</span><%= @hostName %></p>
+  <p><span class="description">Kernel Version</span><%= @kernelRelease %></p>
+  <!-- <p><span class="description">起動経過時刻</span><%= @upTime %>（時間：<%= @upTimeHour %>h）</p> -->
+  <p><span class="description">起動経過時間</span><%= @upTimeHour %>h (秒:<%= @upTimeSeconds %>s)</p>
+  <p><span class="description">Eth0 IP</span><%= @ipEth0 %></p>
+  <p><span class="description">Eth2 IP</span><%= @ipEth2 %></p>
+</div>
+
+<div class="resource_info">
+<h3>サービス情報</h3>
+  <p><span class="description">Zabbix Proxy</span><span class="zbx_proxy"><%= @serviceZbxProxy %></span></p>
+  <p><span class="description">Zabbix Agent</span><span class="zbx_agent"><%= @serviceZbxAgent %></span>
+    <span class="description_sub">Zabbix Serverとの通信</span><%= @pingZbxServer %></p>
+  <p><span class="description">Postgresql</span><span class="pgsql"><%= @servicePgsql %></span></p>
+  <p><span class="description">SNMPTT</span><span class="snmptt"><%= @serviceSnmptt %></span>
+    <span class="description_sub">Mode</span><%= @snmpttMode %></p>
+  <p><span class="description">SNMPTRAPD</span><span class="snmptrapd"><%= @serviceSnmptrapd %></span></p>
+  <p><span class="description">NTPD</span><span class="ntpd"><%= @serviceNtpd %></span>
+    <span class="description_sub">同期先</span><%= @ntpServer %></p>
+  <p><span class="description">Rsyslog</span><span class="rsyslog"><%= @serviceRsyslog %></span></p>
+</div>
+
+<div class="resource_info">
+<h3>リソース情報</h3>
+  <div class="chart_div" id="chart_cpu"><p>CPU</p><%= pie_chart @chart_data_cpu, width: "200px", height: "150px" %></div>
+  <div class="chart_div"><p>MEMORY</p><%= pie_chart @chart_data_memory, width: "200px", height: "150px" %></div>
+  <div class="chart_div"><p>DISK</p><%= pie_chart @chart_data_disk, width: "200px", height: "150px" %></div>
+<ul class="resource_ul">
+  <div id="home_get_ajax" class="ajax_update_button"><i class="fa fa-repeat" aria-hidden="true"></i><%= link_to '', { action: :show }, remote: true %></div>
+  <button id="home_start" class="button">Start</button>
+  <span class="class_countdown">CountDown:
+    <select id="home_interval" name="interval">
+      <option value="10">10s</option>
+      <option value="30" selected>30s</option>
+      <option value="60">60s</option>
+      <option value="300">300s</option>
+    </select>
+  </span>
+  <span id="home_countdown" class="do_countdown">
+  </span>
+  <button id="home_stop" class="button">Stop</button>
+  <p><span class="description">CPUアイドル</span><span class="cpu_idle set_loading"><%= @cpuIdle %>%</span></p>
+  <p><span class="description">Memory容量</span><span class="mem_size set_loading"><%= @memSize %></span>
+    <span class="description">Memory空き容量</span><span class="mem_free set_loading"><%= @memFree %></span></p>
+  <p><span class="description">Swap容量</span><span class="swap_size set_loading"><%= @swapSize %></span>
+    <span class="description">Swap空き容量</span><span class="swap_free set_loading"><%= @swapFree %></span></p>
+  <p><span class="description">Disk容量</span><span class="disk_size set_loading"><%= @diskSize %></span>
+    <span class="description">Disk空き容量</span><span class="disk_free set_loading"><%= @diskFree %></span></p>
+</ul>
+</div>
+
+<div class="log_info">
+<ul>
+  <h3>ログ情報</h3>
+  <%= paginate @logsSortAfter %> 
+<!-- 
+  <span class="pagination_comment"><%= page_entries_info @logsSortAfter %></span>
+-->
+  <table class="log_info_table">
+    <tr>
+      <th>Month</th>
+      <th>Day</th>
+      <th>Time</th>
+      <th>Host</th>
+      <th>Module</th>
+      <th>Message</th>
+    </tr>
+    <% @logsSortAfter.each do |value| %>
+    <tr>
+      <td><%= value.split(' ', 6).first %></td>
+      <td><%= value.split(' ', 6).second %></td>
+      <td><%= value.split(' ', 6).third %></td>
+      <td><%= value.split(' ', 6).fourth %></td>
+      <td><%= value.split(' ', 6).fifth %></td>
+      <td><%= value.split(' ', 6).last %></td>
+    </tr>
+    <% end %>
+  </table>
+</ul>
+</div>
+
+</div>
